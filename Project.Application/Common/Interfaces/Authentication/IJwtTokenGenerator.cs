@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Project.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,5 @@ namespace Project.Application.Common.Interfaces.Authentication;
 public interface IJwtTokenGenerator
 {
 
-    string GenerateToken(Guid userId, string firstName, string lastName);
+    string GenerateToken(User user);
 }

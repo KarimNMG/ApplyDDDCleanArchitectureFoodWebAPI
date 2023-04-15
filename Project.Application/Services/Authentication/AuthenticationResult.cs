@@ -1,8 +1,7 @@
-﻿namespace Project.Application.Services.Authentication;
+﻿using Project.Domain.Entities;
+
+namespace Project.Application.Services.Authentication;
 
 public record AuthenticationResult(
-    Guid Id,
-    string FirstName,
-    string LastName,
-    string Email,
+    User user ,
     string Token);
