@@ -1,4 +1,5 @@
-﻿using Project.Application.Common.Interfaces.Authentication;
+﻿using Project.Application.Common.Errors;
+using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Common.Interfaces.Presistance;
 using Project.Domain.Entities;
 
@@ -38,7 +39,7 @@ public class AuthenticationService : IAuthenticationService
         var user = returnUser(Email);
         if (user is not null)
         {
-            throw new Exception("User with given email is already exist");
+            throw new DuplicationEmailException();
         }
 
         user = new User
