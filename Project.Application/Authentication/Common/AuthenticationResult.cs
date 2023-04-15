@@ -1,7 +1,7 @@
 ﻿using Project.Domain.Entities;
 
-namespace Project.Application.Services.Authentication;
+namespace Project.Application.Authentication.Common;
 
 public record AuthenticationResult(
-    User user ,
+    User user,
     string Token);

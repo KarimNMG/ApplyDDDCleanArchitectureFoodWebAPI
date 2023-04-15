@@ -95,4 +95,3 @@ internal sealed class ApplicationProblemDetailsFactory : ProblemDetailsFactory
             problemDetails.Extensions.Add("errorCodes", errors.Select(e => e.Code));
     }
 }
-
