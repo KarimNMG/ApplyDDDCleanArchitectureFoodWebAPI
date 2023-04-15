@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
+using Project.WebApi.Common.Http;
 using System.Diagnostics;
 
 namespace Project.WebApi.Errors;
@@ -88,7 +90,9 @@ internal sealed class ApplicationProblemDetailsFactory : ProblemDetailsFactory
 
         }
 
-        problemDetails.Extensions.Add("customProperty", "customValue");
+        var errors = httpContext?.Items[HttpContextItemKeys.Erros] as List<Error>;
+        if (errors is not null)
+            problemDetails.Extensions.Add("errorCodes", errors.Select(e => e.Code));
     }
 }
 

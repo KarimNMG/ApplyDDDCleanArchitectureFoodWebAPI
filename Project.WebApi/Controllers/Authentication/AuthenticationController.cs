@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Project.Application.Services.Authentication;
 using Project.Contracts.Authentication;
@@ -6,8 +7,7 @@ using Project.Contracts.Authentication;
 namespace Project.WebApi.Controllers.Authentication
 {
     [Route("auth")]
-    [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : ApiController
     {
         private readonly IAuthenticationService authenticationService;
 
@@ -19,23 +19,27 @@ namespace Project.WebApi.Controllers.Authentication
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest registerRequest)
         {
-            var authResult = authenticationService.Register(
+            ErrorOr<AuthenticationResult> authResult = authenticationService.Register(
                 registerRequest.FirstName,
                 registerRequest.LastName,
                 registerRequest.Email,
                 registerRequest.Password);
 
-            var response = new AuthenticationResponse
-            (
-                authResult.user.Id,
-                authResult.user.FirstName!,
-                authResult.user.LastName!,
-                authResult.user.Email!,
-                authResult.Token
-             );
+            return authResult.Match(
+                authRes => Ok(MapRegisterResponse(authRes)),
+                errors => Problem(errors));
+        }
 
-
-            return Ok(response);
+        private AuthenticationResponse MapRegisterResponse(AuthenticationResult result)
+        {
+            return new AuthenticationResponse
+             (
+                 result.user.Id,
+                 result.user.FirstName!,
+                 result.user.LastName!,
+                 result.user.Email!,
+                 result.Token
+              );
         }
 
         [HttpPost("login")]
@@ -45,15 +49,9 @@ namespace Project.WebApi.Controllers.Authentication
                 loginRequest.Email,
                 loginRequest.Password);
 
-            var response = new AuthenticationResponse
-            (
-                authResult.user.Id,
-                authResult.user.FirstName!,
-                authResult.user.LastName!,
-                authResult.user.Email!,
-                authResult.Token
-             );
-            return Ok(response);
+            return authResult.Match(
+                authRes => Ok(MapRegisterResponse(authRes)),
+                errors => Problem(errors));
         }
     }
 }

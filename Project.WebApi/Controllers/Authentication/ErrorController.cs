@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Project.Application.Common.Errors;
 
 namespace Project.WebApi.Controllers.Authentication;
 
@@ -14,11 +13,7 @@ public class ErrorController : ControllerBase
     {
         Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
 
-        var (statusCode, message) = exception switch
-        {
-            IServiceException serviceException => ((int)serviceException.StatusCode, serviceException.ErrorMessage),
-            _ => (StatusCodes.Status500InternalServerError, "An unexpected error occurred."),
-        };
-        return Problem(title: message, statusCode: statusCode);
+
+        return Problem(title: exception?.Message, statusCode: 400);
     }
 }

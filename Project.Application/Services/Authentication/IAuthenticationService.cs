@@ -1,7 +1,9 @@
-﻿namespace Project.Application.Services.Authentication;
+﻿using ErrorOr;
+
+namespace Project.Application.Services.Authentication;
 
 public interface IAuthenticationService
 {
-    AuthenticationResult Login(string Email, string Password);
-    AuthenticationResult Register (string FirstName, string LastName, string Email, string Password); 
+    ErrorOr<AuthenticationResult> Login(string Email, string Password);
+    ErrorOr<AuthenticationResult> Register(string FirstName, string LastName, string Email, string Password);
 }

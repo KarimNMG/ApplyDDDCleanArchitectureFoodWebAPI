@@ -1,6 +1,7 @@
-﻿using Project.Application.Common.Errors;
+﻿using ErrorOr;
 using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Common.Interfaces.Presistance;
+using Project.Domain.Common.Errors;
 using Project.Domain.Entities;
 
 namespace Project.Application.Services.Authentication;
@@ -17,13 +18,14 @@ public class AuthenticationService : IAuthenticationService
         _userRepository = userRepository;
     }
 
-    public AuthenticationResult Login(string Email, string Password)
+    public ErrorOr<AuthenticationResult> Login(string Email, string Password)
     {
+        // Now we have a service can return valid result or single error or multiple errors
         var user = returnUser(Email);
         if (user is null)
-            throw new Exception("User with given email does not exists");
+            return Errors.Authentication.InvlaidCredentials;
         if (user.Password != Password)
-            throw new Exception("Invalid Password");
+            return new[] { Errors.Authentication.InvlaidCredentials };
         var token = _jwtTokenGenerator.GenerateToken(user);
         return new AuthenticationResult(new User
         {
@@ -34,12 +36,12 @@ public class AuthenticationService : IAuthenticationService
         }, token);
     }
 
-    public AuthenticationResult Register(string FirstName, string LastName, string Email, string Password)
+    public ErrorOr<AuthenticationResult> Register(string FirstName, string LastName, string Email, string Password)
     {
         var user = returnUser(Email);
         if (user is not null)
         {
-            throw new DuplicationEmailException();
+            return Errors.User.DuplicatEmail;
         }
 
         user = new User
