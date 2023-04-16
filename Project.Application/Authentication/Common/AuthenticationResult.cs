@@ -1,4 +1,6 @@
-﻿using Project.Domain.Users;
+﻿
+
+using Project.Domain.UserAggregate;
 
 namespace Project.Application.Authentication.Common;
 

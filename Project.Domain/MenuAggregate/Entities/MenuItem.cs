@@ -1,12 +1,7 @@
 ﻿using Project.Domain.Common.Models;
-using Project.Domain.Menu.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Project.Domain.MenuAggregate.ValueObjects;
 
-namespace Project.Domain.Menu.Entities;
+namespace Project.Domain.MenuAggregate.Entities;
 
 public sealed class MenuItem : Entity<MenuItemId>
 {
@@ -18,7 +13,7 @@ public sealed class MenuItem : Entity<MenuItemId>
         Description = description;
     }
 
-    public MenuItem Create(string name, string Description)
+    public static MenuItem Create(string name, string Description)
     {
         return new MenuItem(MenuItemId.CreateUnique(), name, Description);
     }

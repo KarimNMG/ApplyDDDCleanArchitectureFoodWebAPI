@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project.Domain.Menu.ValueObjects;
+namespace Project.Domain.MenuAggregate.ValueObjects;
 
 public sealed class MenuSectionId : ValueObject
 {

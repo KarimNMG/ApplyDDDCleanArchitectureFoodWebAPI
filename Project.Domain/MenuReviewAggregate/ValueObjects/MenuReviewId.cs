@@ -5,18 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project.Domain.Dinner.ValueObjects;
+namespace Project.Domain.MenuReviewAggregate.ValueObjects;
 
-public class DinnerId : ValueObject
+public class MenuReviewId : ValueObject
 {
     public Guid Value { get; }
 
-    private DinnerId(Guid value)
+    private MenuReviewId(Guid value)
     {
         Value = value;
     }
 
-    public static DinnerId CreateUnique()
+    public static MenuReviewId CreateUnique()
     {
         return new(Guid.NewGuid());
     }

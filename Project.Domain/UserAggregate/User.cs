@@ -1,4 +1,4 @@
-﻿namespace Project.Domain.Users;
+﻿namespace Project.Domain.UserAggregate;
 
 public class User
 {

@@ -1,4 +1,4 @@
-﻿using Project.Domain.Users;
+﻿using Project.Domain.UserAggregate;
 
 namespace Project.Application.Common.Interfaces.Presistance;
 

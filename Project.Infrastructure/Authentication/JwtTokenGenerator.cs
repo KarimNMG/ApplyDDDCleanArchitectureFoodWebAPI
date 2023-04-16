@@ -2,14 +2,10 @@
 using Microsoft.IdentityModel.Tokens;
 using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Interfaces.Services;
-using Project.Domain.Users;
-using System;
-using System.Collections.Generic;
+using Project.Domain.UserAggregate;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Project.Infrastructure.Authentication;
 

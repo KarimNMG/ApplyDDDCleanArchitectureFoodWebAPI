@@ -1,17 +1,12 @@
 ﻿using Project.Domain.Common.Models;
 using Project.Domain.Common.ValueObjects;
-using Project.Domain.Dinner.ValueObjects;
-using Project.Domain.Host.ValueObjects;
-using Project.Domain.Menu.Entities;
-using Project.Domain.Menu.ValueObjects;
-using Project.Domain.MenuReview.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Project.Domain.DinnerAggregate.ValueObjects;
+using Project.Domain.HostAggregate.ValueObjects;
+using Project.Domain.MenuAggregate.Entities;
+using Project.Domain.MenuAggregate.ValueObjects;
+using Project.Domain.MenuReviewAggregate.ValueObjects;
 
-namespace Project.Domain.Menu;
+namespace Project.Domain.MenuAggregate;
 
 
 /// <summary>
@@ -28,19 +23,22 @@ public sealed class Menu : AggregateRoot<MenuId>
         string description,
         HostId hostId,
         DateTime createdDateTime,
-        DateTime updatedDateTime) : base(id)
+        DateTime updatedDateTime,
+        List<MenuSection> sections) : base(id)
     {
         Name = name;
         Description = description;
         HostId = hostId;
         CreatedDateTime = createdDateTime;
         UpdatedDateTime = updatedDateTime;
+        _sections = sections;
     }
 
-    public Menu Create(
+    public static Menu Create(
         string name,
         string description,
-        HostId hostId)
+        HostId hostId,
+        List<MenuSection> sections)
     {
         return new Menu(
             MenuId.CreateUnique(),
@@ -48,7 +46,8 @@ public sealed class Menu : AggregateRoot<MenuId>
             description,
             hostId,
             DateTime.UtcNow,
-            DateTime.UtcNow);
+            DateTime.UtcNow,
+            sections);
     }
 
     public string Name { get; }

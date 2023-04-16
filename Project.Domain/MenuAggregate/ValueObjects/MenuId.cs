@@ -2,7 +2,7 @@
 
 using Project.Domain.Common.Models;
 
-namespace Project.Domain.Menu.ValueObjects;
+namespace Project.Domain.MenuAggregate.ValueObjects;
 
 public sealed class MenuId : ValueObject
 {

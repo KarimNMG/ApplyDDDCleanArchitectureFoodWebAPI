@@ -1,6 +1,6 @@
 ﻿
 using Project.Application.Common.Interfaces.Presistance;
-using Project.Domain.Users;
+using Project.Domain.UserAggregate;
 
 namespace Project.Infrastructure.Presistance;
 internal class UserRepository : IUserRepository
