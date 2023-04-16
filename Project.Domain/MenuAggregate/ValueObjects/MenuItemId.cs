@@ -16,9 +16,9 @@ public class MenuItemId : ValueObject
         Value = value;
     }
 
-    public static MenuItemId CreateUnique()
+    public static MenuItemId CreateUnique(Guid value)
     {
-        return new(Guid.NewGuid());
+        return new(value);
     }
     public override IEnumerable<object> GetEqualityComponents()
     {

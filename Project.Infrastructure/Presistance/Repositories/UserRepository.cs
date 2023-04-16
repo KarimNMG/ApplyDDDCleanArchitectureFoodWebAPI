@@ -1,8 +1,7 @@
-﻿
-using Project.Application.Common.Interfaces.Presistance;
+﻿using Project.Application.Common.Interfaces.Presistance;
 using Project.Domain.UserAggregate;
 
-namespace Project.Infrastructure.Presistance;
+namespace Project.Infrastructure.Presistance.Repositories;
 internal class UserRepository : IUserRepository
 {
     private static readonly List<User> _users = new List<User>();

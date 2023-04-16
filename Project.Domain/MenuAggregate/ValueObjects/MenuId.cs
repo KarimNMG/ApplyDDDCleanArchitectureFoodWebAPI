@@ -13,9 +13,11 @@ public sealed class MenuId : ValueObject
         Value = value;
     }
 
-    public static MenuId CreateUnique()
+
+
+    public static MenuId CreateUnique(Guid guid)
     {
-        return new(Guid.NewGuid());
+        return new(guid);
     } //  factory method pattern
 
 

@@ -9,7 +9,11 @@ namespace Project.Domain.Common.ValueObjects;
 
 public sealed class Rating : ValueObject
 {
-    public double Value { get; }
+    private Rating()
+    {
+    }
+
+    public double Value { get; private set; }
 
     private Rating(double value)
     {

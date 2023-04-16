@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -8,6 +9,7 @@ using Project.Application.Common.Interfaces.Presistance;
 using Project.Application.Interfaces.Services;
 using Project.Infrastructure.Authentication;
 using Project.Infrastructure.Presistance;
+using Project.Infrastructure.Presistance.Repositories;
 using Project.Infrastructure.Services;
 using System.Text;
 
@@ -21,15 +23,22 @@ public static class DependencyInjection
     {
         services
             .AddAuth(configuration)
-            .AddPersistance();
-        
+            .AddPersistance(configuration);
+
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         return services;
     }
 
-    public static IServiceCollection AddPersistance(this IServiceCollection services)
+    public static IServiceCollection AddPersistance(
+        this IServiceCollection services,
+        ConfigurationManager configuration)
     {
+        services.AddDbContext<ApplicationDbContext>(
+            options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("SQL"));
+            });
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IMenuRepository, MenuRepository>();
 

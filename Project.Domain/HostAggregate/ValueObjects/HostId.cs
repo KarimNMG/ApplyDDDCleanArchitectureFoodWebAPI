@@ -12,17 +12,13 @@ public class HostId : ValueObject
         Value = value;
     }
 
-    public static HostId CreateUnique()
-    {
-        return new(Guid.NewGuid());
-    }
-    public override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
-    }
-
     public static HostId CreateUnique(Guid guid)
     {
         return new(guid);
+    }
+
+    public override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }

@@ -9,9 +9,13 @@ public sealed class MenuSection : Entity<MenuSectionId>
 
     private readonly List<MenuItem> _items = new();
 
-    public string Name { get; }
-    public string Description { get; }
+    public string Name { get; private set; }
+    public string Description { get; private set; }
     public IReadOnlyList<MenuItem> Items => _items.AsReadOnly();
+
+    private MenuSection()
+    {
+    }
     private MenuSection(
         MenuSectionId id,
         string name,
@@ -29,7 +33,7 @@ public sealed class MenuSection : Entity<MenuSectionId>
         List<MenuItem> items)
     {
         return new MenuSection(
-            MenuSectionId.CreateUnique(),
+            MenuSectionId.CreateUnique(Guid.NewGuid()),
             name,
             Description,
             items);
