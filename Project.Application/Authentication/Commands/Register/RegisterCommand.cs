@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project.Application.Authentication.Commands;
+namespace Project.Application.Authentication.Commands.Register;
 
 public sealed record RegisterCommand(
     string firstName,

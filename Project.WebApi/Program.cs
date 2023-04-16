@@ -2,21 +2,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Project.Application;
 using Project.Infrastructure;
-using Project.WebApi.Errors;
-using Project.WebApi.Filters;
-using Project.WebApi.Middleware;
+using Project.WebApi;
+
 
 
 // Add services to the container.
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services
+           .AddPresentation()
            .AddApplication()
            .AddInfrastructure(builder.Configuration);
 
-    //builder.Services.AddControllers(options => options.Filters.Add<ErrorHandlingFilterAttribute>()); // replaced with error endpoint - custom problem detais factory
-    builder.Services.AddControllers();
-    builder.Services.AddSingleton<ProblemDetailsFactory, ApplicationProblemDetailsFactory>();
+
 
 }
 
@@ -26,7 +24,8 @@ var app = builder.Build();
 
     app.UseExceptionHandler("/error");
     app.UseHttpsRedirection();
-
+    app.UseAuthentication();
+    app.UseAuthorization();
     app.MapControllers();
 
     app.Run();

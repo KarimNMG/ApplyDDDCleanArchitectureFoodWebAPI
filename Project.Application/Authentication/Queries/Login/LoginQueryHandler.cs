@@ -24,6 +24,8 @@ internal sealed class LoginQueryHandler :
 
     public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellationToken)
     {
+        await Task.CompletedTask;
+
         // Now we have a service can return valid result or single error or multiple errors
         var user = returnUser(query.email) as User;
         if (user is null)

@@ -3,5 +3,5 @@
 namespace Project.Application.Authentication.Common;
 
 public record AuthenticationResult(
-    User user,
+    User User,
     string Token);

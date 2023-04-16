@@ -6,7 +6,7 @@ using Project.Application.Common.Interfaces.Presistance;
 using Project.Domain.Common.Errors;
 using Project.Domain.Entities;
 
-namespace Project.Application.Authentication.Commands;
+namespace Project.Application.Authentication.Commands.Register;
 
 internal sealed class RegisterCommandHandler :
     IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
@@ -21,6 +21,7 @@ internal sealed class RegisterCommandHandler :
     }
     public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
     {
+        await Task.CompletedTask;
         var user = returnUser(command.email);
         if (user is not null)
         {
