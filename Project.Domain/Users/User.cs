@@ -1,5 +1,4 @@
-﻿
-namespace Project.Domain.Entities;
+﻿namespace Project.Domain.Users;
 
 public class User
 {

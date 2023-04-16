@@ -3,9 +3,9 @@ using ErrorOr;
 using MediatR;
 using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Common.Interfaces.Presistance;
-using Project.Domain.Entities;
 using Project.Domain.Common.Errors;
 using Project.Application.Authentication.Common;
+using Project.Domain.Users;
 
 namespace Project.Application.Authentication.Queries.Login;
 

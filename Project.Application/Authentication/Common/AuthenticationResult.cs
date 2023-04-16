@@ -1,4 +1,4 @@
-﻿using Project.Domain.Entities;
+﻿using Project.Domain.Users;
 
 namespace Project.Application.Authentication.Common;
 

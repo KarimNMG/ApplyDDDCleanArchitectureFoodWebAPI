@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Interfaces.Services;
-using Project.Domain.Entities;
+using Project.Domain.Users;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
