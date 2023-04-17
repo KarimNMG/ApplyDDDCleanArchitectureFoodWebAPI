@@ -1,4 +1,4 @@
-﻿using Project.Domain.Common.Models;
+﻿using Project.Domain.Common.Premitives;
 
 
 namespace Project.Domain.HostAggregate.ValueObjects;

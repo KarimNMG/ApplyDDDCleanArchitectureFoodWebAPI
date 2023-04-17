@@ -1,4 +1,4 @@
-﻿using Project.Domain.Common.Models;
+﻿using Project.Domain.Common.Premitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;

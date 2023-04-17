@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project.Domain.Common.Models;
+namespace Project.Domain.Common.Premitives;
 
 public abstract class AggregateRoot<TId, TIdType> : Entity<TId>
     where TId : AggregateRootId<TIdType>

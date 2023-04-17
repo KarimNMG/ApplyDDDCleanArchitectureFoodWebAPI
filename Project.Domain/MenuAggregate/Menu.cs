@@ -1,4 +1,4 @@
-﻿using Project.Domain.Common.Models;
+﻿using Project.Domain.Common.Premitives;
 using Project.Domain.Common.ValueObjects;
 using Project.Domain.DinnerAggregate.ValueObjects;
 using Project.Domain.HostAggregate.ValueObjects;
