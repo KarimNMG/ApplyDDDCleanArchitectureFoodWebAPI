@@ -8,18 +8,18 @@ using System.Reflection;
 
 namespace Project.Application.Common.Behaviors;
 
-public class ValidationBehavior<TRequest, TResponse> :
+public class ValidationPipelineBehavior<TRequest, TResponse> :
     IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
     where TResponse : IErrorOr
 
 {
 
-    private readonly IValidator<TRequest>? _validator;
+    private readonly IEnumerable<IValidator<TRequest>>? _validators;
 
-    public ValidationBehavior(IValidator<TRequest>? validator = null)
+    public ValidationPipelineBehavior(IEnumerable<IValidator<TRequest>>? validators = null)
     {
-        _validator = validator;
+        _validators = validators;
     }
 
     public async Task<TResponse> Handle(
@@ -31,26 +31,32 @@ public class ValidationBehavior<TRequest, TResponse> :
 
         #region Third Approche
 
-        if (_validator is null)
-        {
-            return await next();
-        }
+        //if (_validators is null || !_validators.Any())
+        //{
+        //    return await next();
+        //}
 
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        //var errors = _validators
+        //    .Select(validator => validator.Validate(request))
+        //    .SelectMany(iError => iError.Errors)
+        //    .Where(validationFailure => validationFailure is not null)
+        //    .Select(failure => new ValidationFailure(failure.PropertyName, failure.ErrorMessage))
+        //    .Distinct()
+        //    .ToList();
 
-        if (validationResult.IsValid)
-        {
-            return await next();
-        }
+        //if (errors.Any())
+        //{
+        //    // return validation result
+        //    TryCreateResponseFromErrors(errors, out var response);
+        //    return response;
+        //}
 
-        return TryCreateResponseFromErrors(validationResult.Errors, out var response)
-            ? response
-            : throw new ValidationException(validationResult.Errors);
+        //return await next();
         #endregion
 
         #region Second Approche
-        //(dynamic result, var isError) = Validate(request);
-        //return isError ? (TResponse)result : await next();
+        (dynamic result, var isError) = Validate(request);
+        return isError ? (TResponse)result : await next();
         #endregion
 
         #region First Approche

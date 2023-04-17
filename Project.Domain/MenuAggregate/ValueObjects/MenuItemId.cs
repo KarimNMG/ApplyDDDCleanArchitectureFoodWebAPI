@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Project.Domain.MenuAggregate.ValueObjects;
 
-public class MenuItemId : ValueObject
+public class MenuItemId : AggregateRootId<Guid>
 {
-    public Guid Value { get; }
+    public override Guid Value { get; protected set; }
 
     private MenuItemId(Guid value)
     {

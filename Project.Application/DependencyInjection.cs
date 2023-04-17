@@ -1,6 +1,4 @@
-﻿
-using ErrorOr;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Project.Application.Authentication.Commands.Register;
@@ -21,11 +19,13 @@ public static class DependencyInjection
 
         services.AddScoped(
                 typeof(IPipelineBehavior<,>),
-                typeof(ValidationBehavior<,>));
+                typeof(ValidationPipelineBehavior<,>));
 
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly(),
+            includeInternalTypes: true); // instead register every single validator alone register all with reflection
 
         //services.AddScoped<IValidator<RegisterCommand>, RegisterCommandValidator>();
-       // services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly()); // instead register every single validator alone register all with reflection
+
 
 
 

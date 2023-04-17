@@ -29,6 +29,8 @@ namespace Project.WebApi.Controllers.Authentication
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest registerRequest)
         {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
             var command = _mapper.Map<RegisterCommand>(registerRequest);
 
             ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
@@ -41,6 +43,8 @@ namespace Project.WebApi.Controllers.Authentication
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
             var query = _mapper.Map<LoginQuery>(loginRequest);
             var authResult = await _mediator.Send(query);
 

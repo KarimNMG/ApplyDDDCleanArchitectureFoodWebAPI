@@ -114,7 +114,9 @@ public class MenuConfigurations : IEntityTypeConfiguration<Menu>
     private void ConfigureMenusTable(EntityTypeBuilder<Menu> builder)
     {
         builder.ToTable("Menus");
+
         builder.HasKey(x => x.Id);
+        
         builder.Property(x => x.Id)
             .ValueGeneratedNever()
             .HasConversion(

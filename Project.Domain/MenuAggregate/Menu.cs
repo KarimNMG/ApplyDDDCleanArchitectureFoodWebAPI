@@ -12,7 +12,7 @@ namespace Project.Domain.MenuAggregate;
 /// <summary>
 /// this is a mune aggregate root for the menu feature
 /// </summary>
-public sealed class Menu : AggregateRoot<MenuId>
+public sealed class Menu : AggregateRoot<MenuId, Guid>
 {
 
     private readonly List<MenuSection> _sections = new();

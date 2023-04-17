@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Project.Application.Authentication.Commands.Register;
 
-public  class RegisterCommandValidator : AbstractValidator<RegisterCommand>
+public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
-    RegisterCommandValidator()
+    public RegisterCommandValidator()
     {
         RuleFor(x => x.firstName).NotEmpty();
         RuleFor(x => x.lastName).NotEmpty();
