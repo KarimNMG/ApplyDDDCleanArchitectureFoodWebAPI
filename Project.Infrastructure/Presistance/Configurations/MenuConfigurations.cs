@@ -15,7 +15,6 @@ public class MenuConfigurations : IEntityTypeConfiguration<Menu>
         ConfigureMenuSectionsTable(builder);
         ConfigureMenuDinnersIds(builder);
         ConfigureMenuReviewIds(builder);
-        ConfigureMenuReviewIds(builder);
     }
 
     private void ConfigureMenuReviewIds(EntityTypeBuilder<Menu> builder)
@@ -76,14 +75,13 @@ public class MenuConfigurations : IEntityTypeConfiguration<Menu>
 
             sb.OwnsMany(s => s.Items, ib =>
             {
+
                 ib.ToTable("MenuItems");
 
-
-
                 ib.WithOwner()
-                 .HasForeignKey(nameof(MenuItem.Id), "MenuSectionId", "MenuId");
+                 .HasForeignKey("MenuSectionId", "MenuId");
 
-                ib.HasKey("MenuSectionId", "MenuId");
+                ib.HasKey(nameof(MenuItem.Id), "MenuSectionId", "MenuId");
 
                 ib.Property(i => i.Id)
                   .HasColumnName("MenuItemId")
@@ -116,7 +114,7 @@ public class MenuConfigurations : IEntityTypeConfiguration<Menu>
         builder.ToTable("Menus");
 
         builder.HasKey(x => x.Id);
-        
+
         builder.Property(x => x.Id)
             .ValueGeneratedNever()
             .HasConversion(
@@ -131,14 +129,12 @@ public class MenuConfigurations : IEntityTypeConfiguration<Menu>
            .Property(n => n.Description)
            .HasMaxLength(100);
 
-        builder
-            .OwnsOne(p => p.AverageRating);
+        builder.OwnsOne(p => p.AverageRating);
 
         builder
            .Property(n => n.HostId)
            .HasConversion(
             id => id.Value,
             value => HostId.CreateUnique(value));
-
     }
 }
