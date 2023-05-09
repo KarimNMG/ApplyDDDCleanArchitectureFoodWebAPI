@@ -9,6 +9,7 @@ using Project.Application.Common.Interfaces.Presistance;
 using Project.Application.Interfaces.Services;
 using Project.Infrastructure.Authentication;
 using Project.Infrastructure.Presistance;
+using Project.Infrastructure.Presistance.Interceptors;
 using Project.Infrastructure.Presistance.Repositories;
 using Project.Infrastructure.Services;
 using System.Text;
@@ -39,6 +40,7 @@ public static class DependencyInjection
             {
                 options.UseSqlServer(configuration.GetConnectionString("SQL"));
             });
+        services.AddScoped<PublishDomainEventsInterceptor>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IMenuRepository, MenuRepository>();
 

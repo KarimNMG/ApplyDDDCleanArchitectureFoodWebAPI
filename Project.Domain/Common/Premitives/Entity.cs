@@ -1,14 +1,17 @@
 ﻿namespace Project.Domain.Common.Premitives;
 
-public abstract class Entity<TId> : IEquatable<Entity<TId>>
-    where TId : notnull
+public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
+    where TId : ValueObject
 {
 
+    private readonly List<IDomainEvent> _domainEvents = new();
     protected Entity()
     {
 
     }
     public TId Id { get; protected set; }
+    public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+
     protected Entity(TId id)
     {
         Id = id;
@@ -37,5 +40,15 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
     public override int GetHashCode()
     {
         return Id.GetHashCode();
+    }
+
+    public void AddDomainEvent(IDomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 }

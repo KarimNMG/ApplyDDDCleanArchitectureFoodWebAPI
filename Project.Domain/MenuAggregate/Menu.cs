@@ -3,6 +3,7 @@ using Project.Domain.Common.ValueObjects;
 using Project.Domain.DinnerAggregate.ValueObjects;
 using Project.Domain.HostAggregate.ValueObjects;
 using Project.Domain.MenuAggregate.Entities;
+using Project.Domain.MenuAggregate.Events;
 using Project.Domain.MenuAggregate.ValueObjects;
 using Project.Domain.MenuReviewAggregate.ValueObjects;
 
@@ -45,7 +46,7 @@ public sealed class Menu : AggregateRoot<MenuId, Guid>
         HostId hostId,
         List<MenuSection> sections)
     {
-        return new Menu(
+        var menu =  new Menu(
             MenuId.CreateUnique(Guid.NewGuid()),
             name,
             description,
@@ -53,6 +54,8 @@ public sealed class Menu : AggregateRoot<MenuId, Guid>
             DateTime.UtcNow,
             DateTime.UtcNow,
             sections);
+        menu.AddDomainEvent(new MenuCreated(menu));
+        return menu;
     }
 
     public string Name { get; private set; }
