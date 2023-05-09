@@ -1,4 +1,4 @@
-﻿using Project.Domain.Common.Premitives;
+﻿using Project.Domain.Common.Primitives;
 using Project.Domain.Common.ValueObjects;
 using Project.Domain.DinnerAggregate.ValueObjects;
 using Project.Domain.HostAggregate.ValueObjects;
@@ -9,9 +9,8 @@ using Project.Domain.MenuReviewAggregate.ValueObjects;
 
 namespace Project.Domain.MenuAggregate;
 
-
 /// <summary>
-/// this is a mune aggregate root for the menu feature
+/// this is a menu aggregate root for the menu feature
 /// </summary>
 public sealed class Menu : AggregateRoot<MenuId, Guid>
 {

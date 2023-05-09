@@ -4,5 +4,7 @@ namespace Project.Infrastructure.Services;
 
 public class DateTimeProvider : IDateTimeProvider
 {
-    public DateTime UtcNow => DateTime.UtcNow.AddHours(2);
+    public DateTime UtcNow => DateTime.UtcNow;
+
+    public DateTime LocalTime => DateTime.UtcNow.AddHours(2);
 }

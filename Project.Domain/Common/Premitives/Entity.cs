@@ -1,4 +1,4 @@
-﻿namespace Project.Domain.Common.Premitives;
+﻿namespace Project.Domain.Common.Primitives;
 
 public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
     where TId : ValueObject

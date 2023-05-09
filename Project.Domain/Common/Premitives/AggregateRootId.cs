@@ -1,4 +1,4 @@
-﻿namespace Project.Domain.Common.Premitives;
+﻿namespace Project.Domain.Common.Primitives;
 
 public abstract class AggregateRootId<TId> : ValueObject
 {
