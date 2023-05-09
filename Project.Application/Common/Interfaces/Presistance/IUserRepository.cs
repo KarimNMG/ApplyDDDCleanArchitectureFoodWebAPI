@@ -6,4 +6,7 @@ public interface IUserRepository
 {
     User? GetUserByEmailAsync(string email);
     Guid AddAsync(User user);
+
+    Guid UpdateAsync(User user);
+    User? GetUserById(Guid userId);
 }

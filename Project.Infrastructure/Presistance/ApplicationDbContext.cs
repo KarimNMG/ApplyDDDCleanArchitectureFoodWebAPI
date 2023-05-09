@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Domain.Common.Premitives;
 using Project.Domain.MenuAggregate;
+using Project.Domain.UserAggregate;
 using Project.Infrastructure.Presistance.Interceptors;
 using System.Reflection;
 
@@ -18,6 +19,7 @@ public sealed class ApplicationDbContext : DbContext
     }
 
     public DbSet<Menu> Menus { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

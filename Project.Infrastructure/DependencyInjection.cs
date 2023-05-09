@@ -6,8 +6,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Common.Interfaces.Presistance;
+using Project.Application.Common.Interfaces.UnitOfWorks;
 using Project.Application.Interfaces.Services;
 using Project.Infrastructure.Authentication;
+using Project.Infrastructure.Commons;
 using Project.Infrastructure.Presistance;
 using Project.Infrastructure.Presistance.Interceptors;
 using Project.Infrastructure.Presistance.Repositories;
@@ -26,6 +28,7 @@ public static class DependencyInjection
             .AddAuth(configuration)
             .AddPersistance(configuration);
 
+        services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
         return services;

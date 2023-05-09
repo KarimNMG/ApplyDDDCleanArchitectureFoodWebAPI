@@ -4,15 +4,31 @@ using Project.Domain.UserAggregate;
 namespace Project.Infrastructure.Presistance.Repositories;
 internal class UserRepository : IUserRepository
 {
-    private static readonly List<User> _users = new List<User>();
+    private readonly ApplicationDbContext _context;
+
+    public UserRepository(ApplicationDbContext context)
+    {
+        _context = context;
+    }
     public Guid AddAsync(User user)
     {
-        _users.Add(user);
+        _context.Add(user);
         return user.Id;
     }
 
     public User? GetUserByEmailAsync(string email)
     {
-        return _users.SingleOrDefault(u => u.Email == email);
+        return _context.Set<User>().SingleOrDefault(u => u.Email == email);
+    }
+
+    public User? GetUserById(Guid userId)
+    {
+        return _context.Set<User>().SingleOrDefault(u => u.Id == userId);
+    }
+
+    public Guid UpdateAsync(User user)
+    {
+        var ret = _context.Set<User>().Update(user);
+        return ret.Entity.Id;
     }
 }

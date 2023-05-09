@@ -31,32 +31,32 @@ public class ValidationPipelineBehavior<TRequest, TResponse> :
 
         #region Third Approche
 
-        //if (_validators is null || !_validators.Any())
-        //{
-        //    return await next();
-        //}
+        if (_validators is null || !_validators.Any())
+        {
+            return await next();
+        }
 
-        //var errors = _validators
-        //    .Select(validator => validator.Validate(request))
-        //    .SelectMany(iError => iError.Errors)
-        //    .Where(validationFailure => validationFailure is not null)
-        //    .Select(failure => new ValidationFailure(failure.PropertyName, failure.ErrorMessage))
-        //    .Distinct()
-        //    .ToList();
+        var errors = _validators
+            .Select(validator => validator.Validate(request))
+            .SelectMany(iError => iError.Errors)
+            .Where(validationFailure => validationFailure is not null)
+            .Select(failure => new ValidationFailure(failure.PropertyName, failure.ErrorMessage))
+            .Distinct()
+            .ToList();
 
-        //if (errors.Any())
-        //{
-        //    // return validation result
-        //    TryCreateResponseFromErrors(errors, out var response);
-        //    return response;
-        //}
+        if (errors.Any())
+        {
+            // return validation result
+            TryCreateResponseFromErrors(errors, out var response);
+            return response;
+        }
 
-        //return await next();
+        return await next();
         #endregion
 
         #region Second Approche
-        (dynamic result, var isError) = Validate(request);
-        return isError ? (TResponse)result : await next();
+        //(dynamic result, var isError) = Validate(request);
+        //return isError ? (TResponse)result : await next();
         #endregion
 
         #region First Approche

@@ -3,6 +3,7 @@ using MediatR;
 using Project.Application.Authentication.Common;
 using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Common.Interfaces.Presistance;
+using Project.Application.Common.Interfaces.UnitOfWorks;
 using Project.Domain.Common.Errors;
 using Project.Domain.UserAggregate;
 
@@ -14,10 +15,15 @@ internal sealed class RegisterCommandHandler :
 
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
-    public RegisterCommandHandler(IUserRepository userRepository, IJwtTokenGenerator jwtTokenGenerator)
+    private readonly IUnitOfWork unitOfWork;
+    public RegisterCommandHandler(
+        IUserRepository userRepository,
+        IJwtTokenGenerator jwtTokenGenerator,
+        IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
         _jwtTokenGenerator = jwtTokenGenerator;
+        this.unitOfWork = unitOfWork;
     }
     public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
     {
@@ -28,25 +34,27 @@ internal sealed class RegisterCommandHandler :
             return DomainErrors.User.DuplicatEmail;
         }
 
-        user = new User
-        {
-            Email = command.email,
-            FirstName = command.firstName,
-            LastName = command.lastName,
-            Password = command.password
-        };
+        user = User.CreateUser(
+            Guid.NewGuid(),
+            command.firstName,
+            command.lastName,
+            command.email,
+            command.password);
+
         var userId = _userRepository.AddAsync(user);
 
         var token = _jwtTokenGenerator.GenerateToken(user);
 
-        return new AuthenticationResult(new User
-        {
-            Id = userId,
-            FirstName = user?.FirstName!,
-            LastName = user?.LastName!,
-            Email = user?.Email!
-        },
-        token);
+        await unitOfWork.SaveChangesAsync();
+        
+        return new AuthenticationResult(
+            User.CreateUser(
+                userId,
+                user?.FirstName!,
+                user?.LastName!,
+                user?.Email!,
+                user?.Password!),
+            token);
     }
     private User? returnUser(string email) => _userRepository.GetUserByEmailAsync(email);
 }

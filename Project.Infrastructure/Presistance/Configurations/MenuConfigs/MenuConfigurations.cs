@@ -6,7 +6,7 @@ using Project.Domain.MenuAggregate;
 using Project.Domain.MenuAggregate.Entities;
 using Project.Domain.MenuAggregate.ValueObjects;
 
-namespace Project.Infrastructure.Presistance.Configurations;
+namespace Project.Infrastructure.Presistance.Configurations.MenuConfigs;
 
 public class MenuConfigurations : IEntityTypeConfiguration<Menu>
 {
