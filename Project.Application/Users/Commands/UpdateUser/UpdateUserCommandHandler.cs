@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using MediatR;
 using Project.Application.Common.Interfaces.Presistance;
+using Project.Application.Common.Interfaces.UnitOfWorks;
 using Project.Domain.UserAggregate;
 
 namespace Project.Application.Users.Commands.UpdateUser;
@@ -9,10 +10,13 @@ internal sealed class UpdateUserCommandHandler
     : IRequestHandler<UpdateUserCommand, ErrorOr<string>>
 {
     private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork unitOfWork;
     public UpdateUserCommandHandler(
-        IUserRepository userRepository)
+        IUserRepository userRepository, 
+        IUnitOfWork unitOfWork)
     {
         _userRepository = userRepository;
+        this.unitOfWork = unitOfWork;
     }
 
     public async Task<ErrorOr<string>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
@@ -28,7 +32,7 @@ internal sealed class UpdateUserCommandHandler
         user.SetUserLastName(request.LastName);
 
         var ret = _userRepository.UpdateAsync(user);
-        
+        var saved = await unitOfWork.SaveChangesAsync();
         return ret.ToString();
     }
 

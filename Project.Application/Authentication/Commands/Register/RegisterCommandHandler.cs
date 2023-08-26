@@ -43,6 +43,7 @@ internal sealed class RegisterCommandHandler :
 
         var userId = _userRepository.AddAsync(user);
 
+       
         var token = _jwtTokenGenerator.GenerateToken(user);
 
         await unitOfWork.SaveChangesAsync();

@@ -23,10 +23,10 @@ namespace Project.WebApi.Controllers.Users
 
         [HttpPost("Update/{Id}")]
         public async Task<IActionResult> UpdateUser(
-            Guid userId,
+            Guid Id,
             UpdateUserRequest request)
         {
-            var command = _mapper.Map<UpdateUserCommand>((request, userId));
+            var command = _mapper.Map<UpdateUserCommand>((request, Id));
 
             var commandResult = await _sender.Send(command);
 

@@ -29,6 +29,7 @@ public class User
         string email,
         string password)
     {
+        // buss logic
         return new User(
             id,
             firstName,
