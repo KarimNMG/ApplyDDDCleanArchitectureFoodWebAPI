@@ -8,7 +8,7 @@ namespace Project.WebApi.Controllers;
 [Route("api/[controller]")]
 public class DinnersController : ApiController
 {
-    protected DinnersController(ISender sender) : base(sender)
+    public DinnersController(ISender sender) : base(sender)
     {
     }
 
