@@ -35,4 +35,8 @@ public sealed class ApplicationDbContext : DbContext
         optionsBuilder.AddInterceptors(_publishDomainEventsInterceptor);
         base.OnConfiguring(optionsBuilder);
     }
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return base.SaveChangesAsync(cancellationToken);
+    }
 }

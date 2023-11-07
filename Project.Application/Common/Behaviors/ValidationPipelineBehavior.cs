@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using Project.Domain.Common.Errors;
-using CustomValidationResult = Project.Domain.Common.Errors.CustomValidationResult;
+using ValidationResult = Project.Domain.Common.Errors.ValidationResult;
 
 namespace Project.Application.Common.Behaviors;
 
@@ -28,8 +28,6 @@ public class ValidationPipelineBehavior<TRequest, TResponse>
         // If any errors, return validation result
         // Otherwise, return next()
 
-        #region Third Approche
-
         if (_validators is null || !_validators.Any())
         {
             return await next();
@@ -50,36 +48,6 @@ public class ValidationPipelineBehavior<TRequest, TResponse>
         }
 
         return await next();
-        #endregion
-
-        #region Second Approche
-        //(dynamic result, var isError) = Validate(request);
-        //return isError ? (TResponse)result : await next();
-        #endregion
-
-        #region First Approche
-        //if (_validator is null)
-        //{
-        //    return await next();
-        //}
-        //var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-        //if (validationResult.IsValid)
-        //{
-        //    return await next();
-        //}
-
-        //var errors = validationResult
-        //    .Errors
-        //    .ConvertAll(validationError =>
-        //        Error.Validation(validationError.PropertyName, validationError.ErrorMessage));
-        //return (dynamic)errors;
-        /*
-            it's dangrous to use dynamic but 
-            if exception occurred we can use error controller and throw Exception
-            With the error list
-         */
-        #endregion
 
     }
 
@@ -88,14 +56,13 @@ public class ValidationPipelineBehavior<TRequest, TResponse>
     {
         if (typeof(TResult) == typeof(Result))
         {
-            return (CustomValidationResult.WithErrors(errors) as TResult)!;
+            return (ValidationResult.WithErrors(errors) as TResult)!;
         }
-        object validationResult = typeof(CustomValidationResult)
-            .GetGenericTypeDefinition()
-            .MakeGenericType(typeof(TResult).GenericTypeArguments[0])
-            .GetMethod(nameof(CustomValidationResult.WithErrors))!
-            .Invoke(null, new object?[] { errors })!;
-
+        object validationResult = typeof(ValidationResult<>)
+        .GetGenericTypeDefinition()
+        .MakeGenericType(typeof(TResult).GenericTypeArguments[0])
+        .GetMethod(nameof(ValidationResult.WithErrors))!
+        .Invoke(null, new object?[] { errors })!;
         return (TResult)validationResult;
     }
 }

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Project.Domain.Common.Errors;
 
-public sealed class CustomValidationResult : Result, IValidationResult
+public sealed class ValidationResult : Result, IValidationResult
 {
-    private CustomValidationResult(Error[] errors)
+    private ValidationResult(Error[] errors)
         : base(false, IValidationResult.ValidationError) => Errors = errors;
 
     public Error[] Errors { get; }
 
-    public static CustomValidationResult WithErrors(Error[] errors) => new(errors);
+    public static ValidationResult WithErrors(Error[] errors) => new(errors);
 }
