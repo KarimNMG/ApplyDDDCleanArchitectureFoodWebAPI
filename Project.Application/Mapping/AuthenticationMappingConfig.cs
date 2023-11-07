@@ -4,7 +4,7 @@ using Project.Application.Authentication.Common;
 using Project.Application.Authentication.Queries.Login;
 using Project.Contracts.Authentication;
 
-namespace Project.WebApi.Common.Mapping;
+namespace Project.Application.Mapping;
 public class AuthenticationMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)

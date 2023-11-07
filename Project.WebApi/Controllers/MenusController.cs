@@ -11,12 +11,10 @@ namespace Project.WebApi.Controllers;
 public class MenusController : ApiController
 {
     private readonly IMapper _mapper;
-    private readonly ISender _mediatorSender;
 
-    public MenusController(IMapper mapper, ISender mediatorSender)
+    public MenusController(IMapper mapper, ISender sender) : base(sender)
     {
         _mapper = mapper;
-        _mediatorSender = mediatorSender;
     }
 
     [HttpPost]
@@ -25,10 +23,12 @@ public class MenusController : ApiController
         string hostId)
     {
         var command = _mapper.Map<CreateMenueCommand>((menuRequest, hostId));
-        var createMenuResult = await _mediatorSender.Send(command);
+        var createMenuResult = await Sender.Send(command);
         //CreatedAtAction(nameof(GetMunu), new {hostId, menuId = menu.Id}, menu)
-        return createMenuResult.Match(
-            menu => Ok(_mapper.Map<MenuResponse>(menu)),
-            erros => Problem(erros));
+        if (createMenuResult.IsFailure)
+        {
+            return HandleFailure(createMenuResult);
+        }
+        return CreatedAtAction(nameof(CreateMenu), createMenuResult.Value);
     }
 }

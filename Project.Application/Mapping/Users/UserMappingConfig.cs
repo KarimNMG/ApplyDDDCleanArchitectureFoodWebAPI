@@ -1,12 +1,8 @@
 ﻿using Mapster;
-using Project.Application.Menus.Commands.CreateMenu;
-using Project.Contracts.Menus;
-using Project.Domain.MenuAggregate.Entities;
-using Project.Domain.MenuAggregate;
-using Project.Contracts.Users.UpdateUser;
 using Project.Application.Users.Commands.UpdateUser;
+using Project.Contracts.Users.UpdateUser;
 
-namespace Project.WebApi.Common.Mapping.Users;
+namespace Project.Application.Mapping.Users;
 
 public class UserMappingConfig : IRegister
 {

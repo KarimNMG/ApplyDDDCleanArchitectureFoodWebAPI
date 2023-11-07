@@ -1,20 +1,20 @@
-﻿using ErrorOr;
-using MediatR;
+﻿using MediatR;
 using Project.Application.Common.Interfaces.Presistance;
+using Project.Domain.Common.Errors;
 using Project.Domain.HostAggregate.ValueObjects;
 using Project.Domain.MenuAggregate;
 using Project.Domain.MenuAggregate.Entities;
 
 namespace Project.Application.Menus.Commands.CreateMenu;
 
-internal class CreateMenuCommandHandler : IRequestHandler<CreateMenueCommand, ErrorOr<Menu>>
+internal class CreateMenuCommandHandler : IRequestHandler<CreateMenueCommand, Result<Menu>>
 {
     private readonly IMenuRepository _menuRepository;
     public CreateMenuCommandHandler(IMenuRepository menuRepository)
     {
         _menuRepository = menuRepository;
     }
-    public async Task<ErrorOr<Menu>> Handle(
+    public async Task<Result<Menu>> Handle(
         CreateMenueCommand request,
         CancellationToken cancellationToken)
     {

@@ -1,8 +1,9 @@
 ﻿using Mapster;
 using MapsterMapper;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Project.WebApi.Common.Mapping;
+namespace Project.Application.Mapping;
 
 public static class DependencyInjection
 {

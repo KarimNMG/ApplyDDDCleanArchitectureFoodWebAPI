@@ -1,16 +1,16 @@
-﻿using ErrorOr;
-using MediatR;
+﻿using MediatR;
 using Project.Application.Authentication.Common;
 using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Common.Interfaces.Presistance;
 using Project.Application.Common.Interfaces.UnitOfWorks;
 using Project.Domain.Common.Errors;
 using Project.Domain.UserAggregate;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Project.Application.Authentication.Commands.Register;
 
 internal sealed class RegisterCommandHandler :
-    IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
+    IRequestHandler<RegisterCommand, Result<AuthenticationResult>>
 {
 
     private readonly IUserRepository _userRepository;
@@ -25,13 +25,14 @@ internal sealed class RegisterCommandHandler :
         _jwtTokenGenerator = jwtTokenGenerator;
         this.unitOfWork = unitOfWork;
     }
-    public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
+
+    public async Task<Result<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
     {
         await Task.CompletedTask;
         var user = returnUser(command.email);
         if (user is not null)
         {
-            return DomainErrors.User.DuplicatEmail;
+            return Result.Failure<AuthenticationResult>(DomainErrors.User.DuplicatEmail);
         }
 
         user = User.CreateUser(
@@ -43,11 +44,11 @@ internal sealed class RegisterCommandHandler :
 
         var userId = _userRepository.AddAsync(user);
 
-       
+
         var token = _jwtTokenGenerator.GenerateToken(user);
 
         await unitOfWork.SaveChangesAsync();
-        
+
         return new AuthenticationResult(
             User.CreateUser(
                 userId,

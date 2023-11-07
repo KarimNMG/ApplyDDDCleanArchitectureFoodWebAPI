@@ -1,5 +1,4 @@
-﻿using ErrorOr;
-using MapsterMapper;
+﻿using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +14,12 @@ namespace Project.WebApi.Controllers.Authentication
     [AllowAnonymous]
     public class AuthenticationController : ApiController
     {
-        private readonly ISender _mediator;
         private readonly IMapper _mapper;
 
         public AuthenticationController(
-            IMediator mediator,
-            IMapper mapper)
+            ISender sender,
+            IMapper mapper) : base(sender)
         {
-            this._mediator = mediator;
             _mapper = mapper;
         }
 
@@ -33,11 +30,12 @@ namespace Project.WebApi.Controllers.Authentication
                 return ValidationProblem(ModelState);
             var command = _mapper.Map<RegisterCommand>(registerRequest);
 
-            ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
-
-            return authResult.Match(
-                authRes => Ok(_mapper.Map<AuthenticationResult>(authRes)),
-                errors => Problem(errors));
+            Result<AuthenticationResult> authResult = await Sender.Send(command);
+            if (authResult.IsFailure)
+            {
+                return HandleFailure(authResult);
+            }
+            return CreatedAtAction(nameof(Register), authResult.Value);
         }
 
         [HttpPost("login")]
@@ -46,19 +44,15 @@ namespace Project.WebApi.Controllers.Authentication
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
             var query = _mapper.Map<LoginQuery>(loginRequest);
-            var authResult = await _mediator.Send(query);
+            var authResult = await Sender.Send(query);
 
-
-            if (authResult.IsError && authResult.FirstError == DomainErrors.Authentication.InvlaidCredentials)
+            if (authResult.IsFailure)
             {
-                return Problem(
-                    statusCode: StatusCodes.Status401Unauthorized,
-                    title: authResult.FirstError.Description);
+                return HandleFailure(authResult);
             }
 
-            return authResult.Match(
-                authRes => Ok(_mapper.Map<AuthenticationResponse>(authRes)),
-                errors => Problem(errors));
+
+            return Ok(authResult.Value);
         }
     }
 }

@@ -1,17 +1,14 @@
-﻿using ErrorOr;
-using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation;
 using MediatR;
-using Project.Application.Authentication.Commands.Register;
-using Project.Application.Authentication.Common;
-using System.Reflection;
+using Project.Domain.Common.Errors;
+using CustomValidationResult = Project.Domain.Common.Errors.CustomValidationResult;
 
 namespace Project.Application.Common.Behaviors;
 
-public class ValidationPipelineBehavior<TRequest, TResponse> :
-    IPipelineBehavior<TRequest, TResponse>
+public class ValidationPipelineBehavior<TRequest, TResponse>
+    : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
-    where TResponse : IErrorOr
+    where TResponse : Result
 
 {
 
@@ -27,7 +24,9 @@ public class ValidationPipelineBehavior<TRequest, TResponse> :
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-
+        // Validate Request
+        // If any errors, return validation result
+        // Otherwise, return next()
 
         #region Third Approche
 
@@ -38,17 +37,16 @@ public class ValidationPipelineBehavior<TRequest, TResponse> :
 
         var errors = _validators
             .Select(validator => validator.Validate(request))
-            .SelectMany(iError => iError.Errors)
+            .SelectMany(validationResult => validationResult.Errors)
             .Where(validationFailure => validationFailure is not null)
-            .Select(failure => new ValidationFailure(failure.PropertyName, failure.ErrorMessage))
+            .Select(failure => new Error(failure.PropertyName, failure.ErrorMessage))
             .Distinct()
-            .ToList();
+            .ToArray();
 
         if (errors.Any())
         {
             // return validation result
-            TryCreateResponseFromErrors(errors, out var response);
-            return response;
+            return createValidationResult<TResponse>(errors);
         }
 
         return await next();
@@ -85,27 +83,19 @@ public class ValidationPipelineBehavior<TRequest, TResponse> :
 
     }
 
-    private (List<Error> errors, bool isError) Validate(TRequest request)
+    private static TResult createValidationResult<TResult>(Error[] errors)
+        where TResult : Result
     {
-        var errors = new List<Error> { Error.Conflict() };
-        return (errors, errors.Any());
-    }
+        if (typeof(TResult) == typeof(Result))
+        {
+            return (CustomValidationResult.WithErrors(errors) as TResult)!;
+        }
+        object validationResult = typeof(CustomValidationResult)
+            .GetGenericTypeDefinition()
+            .MakeGenericType(typeof(TResult).GenericTypeArguments[0])
+            .GetMethod(nameof(CustomValidationResult.WithErrors))!
+            .Invoke(null, new object?[] { errors })!;
 
-    private static bool TryCreateResponseFromErrors(
-        List<ValidationFailure> validationFailures,
-        out TResponse response)
-    {
-        List<Error> errors = validationFailures.ConvertAll(x => Error.Validation(
-                code: x.PropertyName,
-                description: x.ErrorMessage));
-
-        response = (TResponse?)typeof(TResponse)
-            .GetMethod(
-                name: nameof(ErrorOr<object>.From),
-                bindingAttr: BindingFlags.Static | BindingFlags.Public,
-                types: new[] { typeof(List<Error>) })?
-            .Invoke(null, new[] { errors })!;
-
-        return response is not null;
+        return (TResult)validationResult;
     }
 }

@@ -1,7 +1,8 @@
-﻿using ErrorOr;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Project.Domain.Common.Errors;
 using Project.WebApi.Common.Http;
 
 namespace Project.WebApi.Controllers;
@@ -11,44 +12,32 @@ namespace Project.WebApi.Controllers;
 [Authorize]
 public class ApiController : ControllerBase
 {
-    protected IActionResult Problem(List<Error> errors)
+    protected readonly ISender Sender;
+
+    protected ApiController(ISender sender)
     {
-        if (errors.Count is 0)
-        {
-            return Problem();
-        }
-
-        if (errors.All(err => err.Type == ErrorType.Validation))
-        {
-            ValidationProblem(errors);
-        }
-
-        // We can add custom logic here to handle different types of errors
-
-
-        HttpContext.Items[HttpContextItemKeys.Erros] = errors;
-        return Problem(errors[0]);
+        Sender = sender;
     }
-
-
-    private IActionResult ValidationProblem(List<Error> errors)
-    {
-        var modelStateDictionary = new ModelStateDictionary();
-        foreach (var error in errors)
-            modelStateDictionary.AddModelError(
-                error.Code,
-                error.Description);
-        return ValidationProblem(modelStateDictionary);
-    }
-    private IActionResult Problem(Error error)
-    {
-        var statusCode = error.Type switch
+    protected IActionResult HandleFailure(Result result) =>
+        result switch
         {
-            ErrorType.Conflict => StatusCodes.Status409Conflict,
-            ErrorType.Validation => StatusCodes.Status400BadRequest,
-            ErrorType.NotFound => StatusCodes.Status404NotFound,
-            _ => StatusCodes.Status500InternalServerError
+            { IsSuccess: true } => throw new InvalidOperationException(),
+            IValidationResult validationResult =>
+            BadRequest(CreateProblemDetails("Validation Error", StatusCodes.Status400BadRequest,
+                result.Error, validationResult.Errors)),
+            _ => BadRequest(CreateProblemDetails("Bad Request", StatusCodes.Status400BadRequest,
+                result.Error))
         };
-        return Problem(statusCode: statusCode, title: error.Description);
-    }
+    private static ProblemDetails CreateProblemDetails(
+        string title,
+        int status,
+        Error error,
+        Error[]? errors = null) => new()
+        {
+            Title = title,
+            Type = error.Code,
+            Detail = error.Message,
+            Status = status,
+            Extensions = { { nameof(errors), errors } }
+        };
 }

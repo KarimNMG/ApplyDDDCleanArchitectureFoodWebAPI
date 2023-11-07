@@ -4,7 +4,7 @@ using Project.Contracts.Menus;
 using Project.Domain.MenuAggregate;
 using Project.Domain.MenuAggregate.Entities;
 
-namespace Project.WebApi.Common.Mapping;
+namespace Project.Application.Mapping;
 
 public class MenuMappingConfig : IRegister
 {

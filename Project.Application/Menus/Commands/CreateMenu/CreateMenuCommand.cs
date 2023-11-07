@@ -1,6 +1,5 @@
-﻿
-using ErrorOr;
-using MediatR;
+﻿using MediatR;
+using Project.Domain.Common.Errors;
 using Project.Domain.MenuAggregate;
 
 namespace Project.Application.Menus.Commands.CreateMenu;
@@ -9,7 +8,7 @@ public sealed record CreateMenueCommand(
     string Name,
     string Description,
     string HostId,
-    List<MenuSectionCommand> Sections) : IRequest<ErrorOr<Menu>>;
+    List<MenuSectionCommand> Sections) : IRequest<Result<Menu>>;
 
 public sealed record MenuSectionCommand(
     string Name,

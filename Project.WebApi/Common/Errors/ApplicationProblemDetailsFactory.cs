@@ -1,8 +1,8 @@
-﻿using ErrorOr;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
+using Project.Domain.Common.Errors;
 using Project.WebApi.Common.Http;
 using System.Diagnostics;
 

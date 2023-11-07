@@ -11,13 +11,11 @@ namespace Project.WebApi.Controllers.Users
     public class UserController : ApiController
     {
         private readonly IMapper _mapper;
-        private readonly ISender _sender;
         public UserController(
             IMapper mapper,
-            ISender sender)
+            ISender sender) : base(sender)
         {
             _mapper = mapper;
-            _sender = sender;
         }
 
 
@@ -28,11 +26,12 @@ namespace Project.WebApi.Controllers.Users
         {
             var command = _mapper.Map<UpdateUserCommand>((request, Id));
 
-            var commandResult = await _sender.Send(command);
-
-            return commandResult.Match(
-                    userId => Ok(userId),
-                    erros => Problem(erros));
+            var commandResult = await Sender.Send(command);
+            if (commandResult.IsFailure)
+            {
+                return HandleFailure(commandResult);
+            }
+            return Ok(commandResult.Value);
         }
     }
 }

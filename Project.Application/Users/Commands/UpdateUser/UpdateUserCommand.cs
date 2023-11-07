@@ -1,16 +1,9 @@
-﻿using ErrorOr;
-using MediatR;
-using Project.Application.Authentication.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using MediatR;
+using Project.Domain.Common.Errors;
 
 namespace Project.Application.Users.Commands.UpdateUser;
 
 public sealed record UpdateUserCommand(
     Guid UserId,
     string FirstName,
-    string LastName) : IRequest<ErrorOr<string>>;
+    string LastName) : IRequest<Result<string>>;

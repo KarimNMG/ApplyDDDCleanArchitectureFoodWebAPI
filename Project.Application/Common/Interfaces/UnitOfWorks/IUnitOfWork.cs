@@ -1,8 +1,8 @@
-﻿using ErrorOr;
-using Microsoft.EntityFrameworkCore;
+﻿using Project.Domain.Common.Errors;
+
 namespace Project.Application.Common.Interfaces.UnitOfWorks;
 
 public interface IUnitOfWork
 {
-    Task<ErrorOr<long?>> SaveChangesAsync();
+    Task<Result<long?>> SaveChangesAsync();
 }

@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Project.Application.Authentication.Commands.Register;
-using Project.Application.Authentication.Common;
 using Project.Application.Common.Behaviors;
+using Project.Application.Mapping;
 using System.Reflection;
 
 namespace Project.Application;
@@ -28,7 +27,7 @@ public static class DependencyInjection
 
 
 
-
+        services.AddMappings();
 
         return services;
     }
