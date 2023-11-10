@@ -13,11 +13,11 @@ internal class UnitOfWork : IUnitOfWork
         this.context = context;
     }
 
-    public async Task<Result<long?>> SaveChangesAsync()
+    public async Task<Result<long?>> SaveChangesAsync(CancellationToken cancellationToken)
     {
         try
         {
-            return await context.SaveChangesAsync();
+            return await context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception ex)
         {

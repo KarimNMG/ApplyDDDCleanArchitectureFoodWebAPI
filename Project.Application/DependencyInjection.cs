@@ -14,7 +14,10 @@ public static class DependencyInjection
         var assembly = typeof(DependencyInjection).Assembly;
 
         services.AddMediatR(config =>
-                config.RegisterServicesFromAssemblies(assembly));
+        {
+            config.RegisterServicesFromAssemblies(assembly);
+            config.AddOpenBehavior(typeof(UnitOfWorkBehavior<,>));
+        });
 
         services.AddScoped(
                 typeof(IPipelineBehavior<,>),

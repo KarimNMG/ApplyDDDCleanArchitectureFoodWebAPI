@@ -47,7 +47,7 @@ internal sealed class RegisterCommandHandler :
 
         var token = _jwtTokenGenerator.GenerateToken(user);
 
-        await unitOfWork.SaveChangesAsync();
+        //await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new AuthenticationResult(
             User.CreateUser(

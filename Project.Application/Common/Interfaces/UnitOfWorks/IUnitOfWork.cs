@@ -4,5 +4,5 @@ namespace Project.Application.Common.Interfaces.UnitOfWorks;
 
 public interface IUnitOfWork
 {
-    Task<Result<long?>> SaveChangesAsync();
+    Task<Result<long?>> SaveChangesAsync(CancellationToken cancellationToken);
 }

@@ -32,7 +32,7 @@ internal sealed class UpdateUserCommandHandler
         user.SetUserLastName(request.LastName);
 
         var ret = _userRepository.UpdateAsync(user);
-        await unitOfWork.SaveChangesAsync();
+        //await unitOfWork.SaveChangesAsync(cancellationToken);
         return ret.ToString();
     }
 
