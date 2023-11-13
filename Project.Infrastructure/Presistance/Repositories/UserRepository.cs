@@ -1,4 +1,5 @@
-﻿using Project.Application.Common.Interfaces.Presistance;
+﻿using Microsoft.EntityFrameworkCore;
+using Project.Application.Common.Interfaces.Presistance;
 using Project.Domain.UserAggregate;
 
 namespace Project.Infrastructure.Presistance.Repositories;
@@ -14,6 +15,11 @@ internal class UserRepository : IUserRepository
     {
         _context.Add(user);
         return user.Id;
+    }
+
+    public async Task<List<User>> GetAllUsersAsync()
+    {
+        return await _context.Set<User>().ToListAsync();
     }
 
     public User? GetUserByEmailAsync(string email)

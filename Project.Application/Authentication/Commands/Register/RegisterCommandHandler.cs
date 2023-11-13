@@ -3,6 +3,7 @@ using Project.Application.Authentication.Common;
 using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Common.Interfaces.Presistance;
 using Project.Application.Common.Interfaces.UnitOfWorks;
+using Project.Application.Interfaces.Services;
 using Project.Domain.Common.Errors;
 using Project.Domain.UserAggregate;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -15,15 +16,18 @@ internal sealed class RegisterCommandHandler :
 
     private readonly IUserRepository _userRepository;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly IUnitOfWork unitOfWork;
     public RegisterCommandHandler(
         IUserRepository userRepository,
         IJwtTokenGenerator jwtTokenGenerator,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IDateTimeProvider dateTimeProvider)
     {
         _userRepository = userRepository;
         _jwtTokenGenerator = jwtTokenGenerator;
         this.unitOfWork = unitOfWork;
+        _dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<Result<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
@@ -40,14 +44,15 @@ internal sealed class RegisterCommandHandler :
             command.firstName,
             command.lastName,
             command.email,
-            command.password);
+            command.password,
+            _dateTimeProvider.UtcNow);
 
         var userId = _userRepository.AddAsync(user);
 
 
         var token = _jwtTokenGenerator.GenerateToken(user);
 
-        //await unitOfWork.SaveChangesAsync(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new AuthenticationResult(
             User.CreateUser(
@@ -55,7 +60,8 @@ internal sealed class RegisterCommandHandler :
                 user?.FirstName!,
                 user?.LastName!,
                 user?.Email!,
-                user?.Password!),
+                user?.Password!,
+                user!.CreatedAt),
             token);
     }
     private User? returnUser(string email) => _userRepository.GetUserByEmailAsync(email);

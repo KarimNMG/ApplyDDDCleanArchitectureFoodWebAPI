@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Project.Application;
 using Project.Infrastructure;
 using Project.WebApi;
+using Project.WebApi.Middleware;
 
 
 
@@ -24,5 +25,6 @@ var app = builder.Build();
     app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
+    app.UseMiddleware<ResponseTimeZoneHandlingMiddleware>();
     app.Run();
 }

@@ -24,8 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Menus\Queries\" />
-    <Folder Include="Users\Commons\" />
-    <Folder Include="Users\Queries\" />
   </ItemGroup>
 
 </Project>

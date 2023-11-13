@@ -7,19 +7,22 @@ public class User
     public string LastName { get; private set; }
     public string Email { get; private set; }
     public string Password { get; private set; }
+    public DateTime CreatedAt { get; private set; }
 
     private User(
         Guid id,
         string firstName,
         string lastName,
         string email,
-        string password)
+        string password,
+        DateTime createdAt)
     {
         Id = id;
         FirstName = firstName;
         LastName = lastName;
         Email = email;
         Password = password;
+        CreatedAt = createdAt;
     }
 
     public static User CreateUser(
@@ -27,7 +30,8 @@ public class User
         string firstName,
         string lastName,
         string email,
-        string password)
+        string password,
+        DateTime createdAt)
     {
         // buss logic
         return new User(
@@ -35,7 +39,8 @@ public class User
             firstName,
             lastName,
             email,
-            password);
+            password,
+            createdAt);
     }
 
     public void SetUserFirstName(string firstName)

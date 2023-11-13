@@ -4,6 +4,7 @@ using Project.Application.Common.Interfaces.Presistance;
 using Project.Domain.Common.Errors;
 using Project.Application.Authentication.Common;
 using Project.Domain.UserAggregate;
+using Project.Application.Interfaces.Services;
 
 namespace Project.Application.Authentication.Queries.Login;
 
@@ -14,7 +15,9 @@ internal sealed class LoginQueryHandler :
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IUserRepository _userRepository;
 
-    public LoginQueryHandler(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+    public LoginQueryHandler(
+        IJwtTokenGenerator jwtTokenGenerator,
+        IUserRepository userRepository)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _userRepository = userRepository;
@@ -35,12 +38,15 @@ internal sealed class LoginQueryHandler :
 
         var token = _jwtTokenGenerator.GenerateToken(user);
 
-        return new AuthenticationResult(User.CreateUser(
-            user.Id,
-            user.FirstName!,
-            user.LastName!,
-            user.Email!,
-            user.Password), token);
+        return new AuthenticationResult(
+            User.CreateUser(
+                user.Id,
+                user.FirstName!,
+                user.LastName!,
+                user.Email!,
+                user.Password,
+                user.CreatedAt),
+            token);
     }
 
 
