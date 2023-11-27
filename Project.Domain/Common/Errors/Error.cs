@@ -20,6 +20,7 @@ public class Error : IEquatable<Error>
         Message = message;
     }
     public static implicit operator string(Error error) => error.Code;
+
     public static bool operator ==(Error? a, Error? b)
     {
         //return Equals(a, b);

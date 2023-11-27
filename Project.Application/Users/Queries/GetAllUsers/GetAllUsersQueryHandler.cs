@@ -1,15 +1,8 @@
 ﻿using MapsterMapper;
 using MediatR;
-using Project.Application.Authentication.Common;
-using Project.Application.Authentication.Queries.Login;
 using Project.Application.Common.Interfaces.Presistance;
 using Project.Application.Users.Commons;
 using Project.Domain.Common.Errors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Project.Application.Users.Queries.GetAllUsers;
 

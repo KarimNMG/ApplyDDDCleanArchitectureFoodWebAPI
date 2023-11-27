@@ -28,6 +28,7 @@ namespace Project.WebApi.Controllers.Authentication
         {
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
+
             var command = _mapper.Map<RegisterCommand>(registerRequest);
 
             Result<AuthenticationResult> authResult = await Sender.Send(command);
