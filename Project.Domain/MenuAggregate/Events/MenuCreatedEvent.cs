@@ -2,4 +2,4 @@
 
 namespace Project.Domain.MenuAggregate.Events;
 
-public record MenuCreated(Menu Menu) : IDomainEvent;
+public record MenuCreatedEvent(Menu menu) : IDomainEvent;

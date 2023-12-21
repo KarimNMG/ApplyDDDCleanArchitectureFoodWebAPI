@@ -23,9 +23,11 @@ public sealed class Menu : AggregateRoot<MenuId, Guid>
     {
 
     }
-    private Menu(MenuId id,
+    private Menu(
+        MenuId id,
         string name,
         string description,
+        AverageRating rating,
         HostId hostId,
         DateTime createdDateTime,
         DateTime updatedDateTime,
@@ -33,30 +35,43 @@ public sealed class Menu : AggregateRoot<MenuId, Guid>
     {
         Name = name;
         Description = description;
+        AverageRating = rating;
         HostId = hostId;
         CreatedDateTime = createdDateTime;
         UpdatedDateTime = updatedDateTime;
         _sections = sections;
     }
 
+
     public static Menu Create(
         string name,
         string description,
-        HostId hostId,
+        double avgRate,
+        int rating,
+        Guid hostId,
         List<MenuSection> sections)
     {
-        var menu =  new Menu(
+        var menu = new Menu(
             MenuId.CreateUnique(Guid.NewGuid()),
             name,
             description,
-            hostId,
+            AverageRating.CreateNew(avgRate, rating),
+            HostId.CreateUnique(hostId),
             DateTime.UtcNow,
             DateTime.UtcNow,
             sections);
-        menu.AddDomainEvent(new MenuCreated(menu));
+        menu.AddDomainEvent(new MenuCreatedEvent(menu));
         return menu;
     }
 
+    public void SetName(string name)
+    {
+        this.Name = name;
+    }
+    public void SetDescription(string description)
+    {
+        this.Description = description;
+    }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public AverageRating AverageRating { get; private set; }

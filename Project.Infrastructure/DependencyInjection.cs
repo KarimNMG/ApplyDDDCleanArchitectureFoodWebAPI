@@ -5,10 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Project.Application.Common.Interfaces.Authentication;
+using Project.Application.Common.Interfaces.Caching;
 using Project.Application.Common.Interfaces.Presistance;
 using Project.Application.Common.Interfaces.UnitOfWorks;
 using Project.Application.Interfaces.Services;
 using Project.Infrastructure.Authentication;
+using Project.Infrastructure.Caching;
 using Project.Infrastructure.Commons;
 using Project.Infrastructure.Presistance;
 using Project.Infrastructure.Presistance.Interceptors;
@@ -30,6 +32,8 @@ public static class DependencyInjection
 
         services.AddTransient(typeof(IUnitOfWork), typeof(UnitOfWork));
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddMemoryCache();
+        services.AddSingleton<ICacheService, CacheService>();
 
         return services;
     }
@@ -74,4 +78,4 @@ public static class DependencyInjection
             }); // return authentication builder which in turn map authschema and coresponding auth handler
         return services;
     }
-}
+} 

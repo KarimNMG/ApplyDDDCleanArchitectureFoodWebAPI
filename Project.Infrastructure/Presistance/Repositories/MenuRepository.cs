@@ -1,19 +1,58 @@
-﻿using Project.Application.Common.Interfaces.Presistance;
+﻿using Microsoft.EntityFrameworkCore;
+using Project.Application.Common.Interfaces.Presistance;
+using Project.Domain.Common.Errors;
 using Project.Domain.MenuAggregate;
+using Project.Domain.MenuAggregate.Errors;
+using Project.Domain.MenuAggregate.ValueObjects;
 
 namespace Project.Infrastructure.Presistance.Repositories;
 
 internal class MenuRepository : IMenuRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly DbSet<Menu> _menuSet;
+    private readonly ApplicationDbContext _applicationDbContext;
     public MenuRepository(ApplicationDbContext context)
     {
-        _context = context;
+        _applicationDbContext = context;
+        _menuSet = context.Menus;
     }
 
-    public void Add(Menu menu)
+    public async Task Add(Menu menu)
     {
-        _context.Add(menu);
-        _context.SaveChanges();
+        await _menuSet.AddAsync(menu);
+    }
+
+    public async Task<List<Menu>> GetAll()
+    {
+        var result = await _menuSet
+            .AsNoTracking()
+            .ToListAsync();
+        return result;
+    }
+
+    public async Task<Menu?> GetMenuById(Guid menuId)
+    {
+        try
+        {
+            //var m = await _applicationDbContext.Menus.FirstOrDefaultAsync(i => i.Id.Value.Equals(menuId));
+            var menu = await _applicationDbContext.Set<Menu>().FirstOrDefaultAsync() ?? null;
+            return menu;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return default;
+        }
+
+    }
+
+    public void Remove(Menu menu)
+    {
+        _menuSet.Remove(menu);
+    }
+
+    public void Update(Menu menu)
+    {
+        _menuSet.Update(menu);
     }
 }

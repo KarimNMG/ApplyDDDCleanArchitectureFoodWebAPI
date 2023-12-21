@@ -1,5 +1,7 @@
 ﻿using Mapster;
 using Project.Application.Menus.Commands.CreateMenu;
+using Project.Application.Menus.Commands.DeleteMenu;
+using Project.Application.Menus.Commands.UpdateMenu;
 using Project.Contracts.Menus;
 using Project.Domain.MenuAggregate;
 using Project.Domain.MenuAggregate.Entities;
@@ -24,8 +26,18 @@ public class MenuMappingConfig : IRegister
         config.NewConfig<MenuItem, MenuItemResponse>()
             .Map(dest => dest.Id, src => src.Id.Value);
 
-        config.NewConfig<(CreateMenueRequest Request, string HostId), CreateMenueCommand>()
+        config.NewConfig<(CreateMenuRequest Request, string HostId), CreateMenuCommand>()
             .Map(dest => dest.HostId, src => src.HostId)
+            .Map(dest => dest.Average, src => src.Request.Average)
+            .Map(dest => dest.Rating, src => src.Request.Rating)
             .Map(dest => dest, src => src.Request);
+
+        config.NewConfig<DeleteMenuRequest, DeleteMenuCommand>()
+            .Map(dest => dest.id, src => src.id);
+
+        config.NewConfig<(UpdateMenuRequest request, Guid id), UpdateMenuCommand>()
+            .Map(dest => dest.Id, src => src.id)
+            .Map(dest => dest.Name, src => src.request.name)
+            .Map(dest => dest.Description, src => src.request.description);
     }
 }

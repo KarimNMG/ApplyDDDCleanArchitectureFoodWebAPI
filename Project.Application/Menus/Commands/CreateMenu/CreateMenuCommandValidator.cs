@@ -2,7 +2,7 @@
 
 namespace Project.Application.Menus.Commands.CreateMenu;
 
-public class CreateMenuCommandValidator : AbstractValidator<CreateMenueCommand>
+public class CreateMenuCommandValidator : AbstractValidator<CreateMenuCommand>
 {
     public CreateMenuCommandValidator()
     {

@@ -16,9 +16,14 @@ public static class DependencyInjection
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssemblies(assembly);
+
+            config.AddOpenBehavior(typeof(QueryCachingPipelineBehavior<,>));
+
             //config.AddOpenBehavior(typeof(UnitOfWorkBehavior<,>));
             //config.AddOpenBehavior(typeof(ChangeTimeZoneBehavior<,>));
         });
+
+
 
         services.AddScoped(
                 typeof(IPipelineBehavior<,>),

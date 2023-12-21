@@ -1,14 +1,15 @@
-﻿using MediatR;
-using Project.Domain.Common.Errors;
+﻿using Project.Application.Messaging;
 using Project.Domain.MenuAggregate;
 
 namespace Project.Application.Menus.Commands.CreateMenu;
 
-public sealed record CreateMenueCommand(
+public sealed record CreateMenuCommand(
     string Name,
     string Description,
-    string HostId,
-    List<MenuSectionCommand> Sections) : IRequest<Result<Menu>>;
+    double Average,
+    int Rating,
+    Guid HostId,
+    List<MenuSectionCommand> Sections) : ICommand<CreateMenuCommandResponse>;
 
 public sealed record MenuSectionCommand(
     string Name,

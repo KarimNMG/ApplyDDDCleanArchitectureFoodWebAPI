@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Project.Contracts.Menus;
 
-public sealed record CreateMenueRequest(
+public sealed record CreateMenuRequest(
     string Name,
     string Description,
+    double Average,
+    int Rating,
     List<MenuSectionRequest> Sections);
 
 public sealed record MenuSectionRequest(

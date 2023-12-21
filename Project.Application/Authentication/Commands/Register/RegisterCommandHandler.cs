@@ -1,9 +1,9 @@
-﻿using MediatR;
-using Project.Application.Authentication.Common;
+﻿using Project.Application.Authentication.Common;
 using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Common.Interfaces.Presistance;
 using Project.Application.Common.Interfaces.UnitOfWorks;
 using Project.Application.Interfaces.Services;
+using Project.Application.Messaging;
 using Project.Domain.Common.Errors;
 using Project.Domain.UserAggregate;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
@@ -11,7 +11,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 namespace Project.Application.Authentication.Commands.Register;
 
 internal sealed class RegisterCommandHandler :
-    IRequestHandler<RegisterCommand, Result<AuthenticationResult>>
+    ICommandHandler<RegisterCommand, AuthenticationResult>
 {
 
     private readonly IUserRepository _userRepository;
@@ -38,9 +38,8 @@ internal sealed class RegisterCommandHandler :
         {
             return Result.Failure<AuthenticationResult>(DomainErrors.User.DuplicatEmail);
         }
-
         user = User.CreateUser(
-            Guid.NewGuid(),
+        Guid.NewGuid(),
             command.firstName,
             command.lastName,
             command.email,
@@ -64,5 +63,6 @@ internal sealed class RegisterCommandHandler :
                 user!.CreatedAt),
             token);
     }
+
     private User? returnUser(string email) => _userRepository.GetUserByEmailAsync(email);
 }

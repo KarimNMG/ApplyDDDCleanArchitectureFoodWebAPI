@@ -1,15 +1,14 @@
-﻿using MediatR;
-using Project.Application.Common.Interfaces.Authentication;
+﻿using Project.Application.Common.Interfaces.Authentication;
 using Project.Application.Common.Interfaces.Presistance;
 using Project.Domain.Common.Errors;
 using Project.Application.Authentication.Common;
 using Project.Domain.UserAggregate;
-using Project.Application.Interfaces.Services;
+using Project.Application.Messaging;
 
 namespace Project.Application.Authentication.Queries.Login;
 
 internal sealed class LoginQueryHandler :
-    IRequestHandler<LoginQuery, Result<AuthenticationResult>>
+    IQueryHandler<LoginQuery, AuthenticationResult>
 {
 
     private readonly IJwtTokenGenerator _jwtTokenGenerator;

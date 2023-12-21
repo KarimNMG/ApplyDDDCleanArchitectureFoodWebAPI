@@ -4,10 +4,10 @@ using Project.Domain.MenuAggregate.Events;
 
 namespace Project.Application.Menus.Events;
 
-public class DummyHandler : INotificationHandler<MenuCreated>
+public class DummyHandler : INotificationHandler<MenuCreatedEvent>
 {
 
-    public Task Handle(MenuCreated notification, CancellationToken cancellationToken)
+    public Task Handle(MenuCreatedEvent notification, CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
