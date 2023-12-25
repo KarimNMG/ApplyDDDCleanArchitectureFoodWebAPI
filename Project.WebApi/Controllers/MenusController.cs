@@ -80,9 +80,10 @@ public class MenusController : ApiController
     }
     [HttpGet]
     public async Task<IActionResult> GetAllMenus(
-        [FromRoute] Guid id)
+        [FromBody] GetAllMenusRequest request)
     {
-        var query = new GetAllMenusQuery();
+        var query = _mapper.Map<GetAllMenusQuery>(request);
+
         var queryResult = await Sender.Send(query);
         //CreatedAtAction(nameof(GetMunu), new {hostId, menuId = menu.Id}, menu)
         if (queryResult.IsFailure)

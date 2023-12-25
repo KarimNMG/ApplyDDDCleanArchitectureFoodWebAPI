@@ -2,6 +2,7 @@
 using Project.Application.Menus.Commands.CreateMenu;
 using Project.Application.Menus.Commands.DeleteMenu;
 using Project.Application.Menus.Commands.UpdateMenu;
+using Project.Application.Menus.Queries.GetAllMenus;
 using Project.Contracts.Menus;
 using Project.Domain.MenuAggregate;
 using Project.Domain.MenuAggregate.Entities;
@@ -39,5 +40,10 @@ public class MenuMappingConfig : IRegister
             .Map(dest => dest.Id, src => src.id)
             .Map(dest => dest.Name, src => src.request.name)
             .Map(dest => dest.Description, src => src.request.description);
+
+        config.NewConfig<GetAllMenusRequest, GetAllMenusQuery>()
+           .Map(dest => dest.Name, src => src.Name)
+           .Map(dest => dest.HostId, src => src.HostId)
+           .Map(dest => dest.CreatedDateTime, src => src.CreatedDateTime);
     }
 }

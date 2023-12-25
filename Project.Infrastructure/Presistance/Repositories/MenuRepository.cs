@@ -4,6 +4,8 @@ using Project.Domain.Common.Errors;
 using Project.Domain.MenuAggregate;
 using Project.Domain.MenuAggregate.Errors;
 using Project.Domain.MenuAggregate.ValueObjects;
+using Project.Infrastructure.Presistance.Specifications;
+using Project.Infrastructure.Presistance.Specifications.MenuSpecifications;
 
 namespace Project.Infrastructure.Presistance.Repositories;
 
@@ -34,9 +36,9 @@ internal class MenuRepository : IMenuRepository
     {
         try
         {
-            //var m = await _applicationDbContext.Menus.FirstOrDefaultAsync(i => i.Id.Value.Equals(menuId));
-            var menu = await _applicationDbContext.Set<Menu>().FirstOrDefaultAsync() ?? null;
-            return menu;
+
+            var menu =  ApplySpecfication(new GetMenuByIdIncludeSectionsSpecification(menuId));
+            return default;
         }
         catch (Exception ex)
         {
@@ -44,6 +46,12 @@ internal class MenuRepository : IMenuRepository
             return default;
         }
 
+    }
+
+    private IQueryable<Menu> ApplySpecfication(
+        Specification<Menu> specification)
+    {
+        return SpecificationEvaluator.GetQuery(_menuSet, specification);
     }
 
     public void Remove(Menu menu)

@@ -2,8 +2,8 @@
 
 public interface ICachedQuery
 {
-    string CacheKey { get; }
-    TimeSpan? Expiration { get; }
+   public string CacheKey { get; }
+    public TimeSpan? Expiration { get; }
 }
 
 public interface ICachedQuery<TResponse> : IQuery<TResponse>, ICachedQuery
