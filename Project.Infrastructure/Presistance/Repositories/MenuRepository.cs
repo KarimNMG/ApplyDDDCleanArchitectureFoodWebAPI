@@ -36,8 +36,8 @@ internal class MenuRepository : IMenuRepository
     {
         try
         {
-
-            var menu =  ApplySpecfication(new GetMenuByIdIncludeSectionsSpecification(menuId));
+            var m = await _menuSet.ToListAsync();
+            var menu = ApplySpecfication(new GetMenuByIdIncludeSectionsSpecification(menuId));
             return default;
         }
         catch (Exception ex)
